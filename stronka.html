@@ -51,6 +51,9 @@
       // Example 2. Create and and button with click event handler.
       ////////////////////////////////////////////////////////////////
       // Create new HTML element
+
+      const url_default = "172.22.114.218:3210";
+
       var new_main_node_sensors = $("<div>", { "class": "container" });
 
       var json_text = '{"v":"","name":"pressure"}';
@@ -133,6 +136,10 @@
         id: "filterIIR",
         "class": 'col',
       });
+      var div4_filter = $("<div>", {
+        id: "filter_val",
+        "class": 'col',
+      });
       var div_border_filter = $("<div>", {
         "class": 'container border',
       });
@@ -140,6 +147,7 @@
       new_row_node_filter.append(div1_filter);
       new_row_node_filter.append(div2_filter);
       new_row_node_filter.append(div3_filter);
+      new_row_node_filter.append(div4_filter);
 
       new_row_node_filter.append(div_border_filter);
 
@@ -155,9 +163,53 @@
       $("#s_" + sensor4.name).html("Name: " + sensor4.name + " | value: " + sensor4.v);
       $("#s_" + sensor5.name).html("Name: " + sensor5.name + " | value: " + sensor5.v);
 
-      $("#filterIIR").html('Transmitancja filtru IIR H(z)=<div class="frac"><span>0.5z<sup>-1</sup>+0.1z<sup>-2</sup></span><span class="symbol">/</span><span class="bottom">0.1z<sup>-1</sup>+0.1z<sup>-1</sup></span>');
-      $("#filterFIR").html('Transmitancja filtru FIR H(z)=0.4+0.5z<sup>-1</sup>+0.1z<sup>-2</sup>');
-      $("#form_select").html('<form action="/action_page.php"> <label for="sensors">Choose a sensor:</label> <select name="sensors" id="sensors">   <option value="pressure">pressure</option>  <option value="temperature">temperature</option>  <option value="humidity">humidity</option>   <option value="roll">roll</option> <option value="pitch">pitch</option> <option value="yaw">yaw</option> </select  <br><br> <input type="submit" value="Submit"></form>');
+      $("#filterIIR").html('Transfer function of IIR H(z)=<div class="frac"><span>0.5z<sup>-1</sup>+0.1z<sup>-2</sup></span><span class="symbol">/</span><span class="bottom">0.1z<sup>-1</sup>+0.1z<sup>-1</sup></span>');
+      $("#filterFIR").html('Transfer function of FIR H(z)=0.4+0.5z<sup>-1</sup>+0.1z<sup>-2</sup>');
+      $("#form_select").html('<form id="loginForm"> <label for="sensors">Choose a sensor:</label> <select name="sensors" id="sensors">   <option value="pressure">pressure</option>  <option value="temperature">temperature</option>  <option value="humidity">humidity</option>   <option value="roll">roll</option> <option value="pitch">pitch</option> <option value="yaw">yaw</option> </select  <br><br> <input type="submit" value="Submit"></form>');
+
+      let loginForm = document.getElementById("loginForm");
+      loginForm.addEventListener("submit", (e) => {
+        
+        e.preventDefault();
+        let sensor = document.getElementById("sensors");
+        if (sensor.value=="pressure"){
+          $("#filterFIR").html('Transfer function of FIR H(z)=test<sup>-1</sup>+0.1z<sup>-2</sup>');
+          $("#filterIIR").html('Transfer function of IIR H(z)=<div class="frac"><span>0.5z<sup>-1</sup>+0.1z<sup>-2</sup></span><span class="symbol">/</span><span class="bottom">0.1z<sup>-1</sup>+0.1z<sup>-1</sup></span>');
+          $("#filter_val").html('test');
+
+        }
+        if (sensor.value=="temperature"){
+          $("#filterFIR").html('Transfer function of FIR H(z)=test<sup>-1</sup>+0.1z<sup>-2</sup>');
+          $("#filterIIR").html('Transfer function of IIR H(z)=<div class="frac"><span>0.5z<sup>-1</sup>+0.1z<sup>-2</sup></span><span class="symbol">/</span><span class="bottom">0.1z<sup>-1</sup>+0.1z<sup>-1</sup></span>');
+          $("#filter_val").html('test1');
+
+        }
+        if (sensor.value=="humidity"){
+          $("#filterFIR").html('Transfer function of FIR H(z)=test<sup>-1</sup>+0.1z<sup>-2</sup>');
+          $("#filterIIR").html('Transfer function of IIR H(z)=<div class="frac"><span>0.5z<sup>-1</sup>+0.1z<sup>-2</sup></span><span class="symbol">/</span><span class="bottom">0.1z<sup>-1</sup>+0.1z<sup>-1</sup></span>');
+          $("#filter_val").html('test');
+
+        }
+        if (sensor.value=="roll"){
+          $("#filterFIR").html('Transfer function of FIR H(z)=test<sup>-1</sup>+0.1z<sup>-2</sup>');
+          $("#filterIIR").html('Transfer function of IIR H(z)=<div class="frac"><span>0.5z<sup>-1</sup>+0.1z<sup>-2</sup></span><span class="symbol">/</span><span class="bottom">0.1z<sup>-1</sup>+0.1z<sup>-1</sup></span>');
+          $("#filter_val").html('test');
+
+        }
+        if (sensor.value=="pitch"){
+          $("#filterFIR").html('Transfer function of FIR H(z)=test<sup>-1</sup>+0.1z<sup>-2</sup>');
+          $("#filterIIR").html('Transfer function of IIR H(z)=<div class="frac"><span>0.5z<sup>-1</sup>+0.1z<sup>-2</sup></span><span class="symbol">/</span><span class="bottom">0.1z<sup>-1</sup>+0.1z<sup>-1</sup></span>');
+          $("#filter_val").html('test');
+
+        }
+        if (sensor.value=="yaw"){
+          $("#filterFIR").html('Transfer function of FIR H(z)=test<sup>-1</sup>+0.1z<sup>-2</sup>');
+          $("#filterIIR").html('Transfer function of IIR H(z)=<div class="frac"><span>0.5z<sup>-1</sup>+0.1z<sup>-2</sup></span><span class="symbol">/</span><span class="bottom">0.1z<sup>-1</sup>+0.1z<sup>-1</sup></span>');
+          $("#filter_val").html('test');
+
+        }
+
+    });
 
 
       // ^ to trzeba wrzucić do funkcji refresh żeby się aktualizowało 
@@ -200,7 +252,7 @@
             g = (value & 0x00ff00) >> 8;
             b = (value & 0x0000ff);
 
-            url_set = "http://172.22.114.218:3210/setpixel.php?x=" + x + "&y=" + y + "&r=" + r + "&g=" + g + "&b=" + b;
+            url_set = "http://"+ url_default +"/setpixel.php?x=" + x + "&y=" + y + "&r=" + r + "&g=" + g + "&b=" + b;
             // $("#feedback").html("User have changed input " + id + " to value equals to " + value + "<br>Request url=" + url);
             $.get(url_set, function (data, status) {
               // $("#feedback").append("<br>Server response: "+JSON.stringify(data));
@@ -224,7 +276,7 @@
         var clear_input = $("<input>", { "id": "clear", "type": "button", "value": "Clear all" });
         clear_input.click(function () {
           $("[id^=LED]").val(0); //Nie wiem co to za linijka ona juz byla wczesniej
-          url_clear = "http://172.22.114.218:3210/setpixel.php?C=1";
+          url_clear = "http://" + url_default+"/setpixel.php?C=1";
           //$("#feedback").html("User have set all inputs to 0.<br>Request url="+url);
           $.get(url_clear, function (data, status) {
             //$("#feedback").append("<br>Server response: "+JSON.stringify(data));
