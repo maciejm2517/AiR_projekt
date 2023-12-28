@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<!-- @author Dominik Łuczak -->
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <title>Sensors control</title>
+  <script src="js/jquery-3.4.1.min.js"></script>
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .frac {
+        display: inline-block;
+        position: relative;
+        vertical-align: middle;
+        letter-spacing: 0.001em;
+        text-align: center;
+    }
+    .frac > span {
+        display: block;
+        padding: 0.1em;
+    }
+    .frac span.bottom {
+        border-top: thin solid black;
+    }
+    .frac span.symbol {
+        display: none;
+    } 
+    </style>
+  <script>
+    $(function () {
+
+      ///////////////////////////////////////////////////
+      // Example 1. Create and and div based on JSON
+      ///////////////////////////////////////////////////
+      // Static JSON
+
+      // Create new HTML element
+      // var div = $("<div>", {
+      // 	id: "s_"+sensor.id,
+      // 	"class": 'some-class',
+      // 	title: sensor.name
+      // });
+
+      // Find element by name body in DOM and add div in it (after last element)
+      // $("body").append(div);
+
+      // Find element by ID and modify HTML (overwrite existing one)
+      // $("#s_"+sensor.id).html("Name: " + sensor.name + " value: " + sensor.v);
+
+      ////////////////////////////////////////////////////////////////
+      // Example 2. Create and and button with click event handler.
+      ////////////////////////////////////////////////////////////////
+      // Create new HTML element
+      var new_main_node_sensors = $("<div>", { "class": "container" });
+
+      var json_text = '{"v":"","name":"pressure"}';
+      var json_text1 = '{"v":"","name":"temperature"}';
+      var json_text2 = '{"v":"","name":"humidity"}';
+      var json_text3 = '{"v":"","name":"roll"}';
+      var json_text4 = '{"v":"","name":"pitch"}';
+      var json_text5 = '{"v":"","name":"yaw"}';
+
+      var sensor = JSON.parse(json_text);
+      var sensor1 = JSON.parse(json_text1);
+      var sensor2 = JSON.parse(json_text2);
+      var sensor3 = JSON.parse(json_text3);
+      var sensor4 = JSON.parse(json_text4);
+      var sensor5 = JSON.parse(json_text5);
+
+      var new_row_node_sensors = $("<div>", { "class": "row" });
+
+      var div = $("<div>", {
+        id: "s_" + sensor.name,
+        "class": 'col',
+        title: sensor.name
+      });
+      new_row_node_sensors.append(div);
+      var div1 = $("<div>", {
+        id: "s_" + sensor1.name,
+        "class": 'col',
+        title: sensor1.name
+      });
+      new_row_node_sensors.append(div1);
+      var div2 = $("<div>", {
+        id: "s_" + sensor2.name,
+        "class": 'col',
+        title: sensor2.name
+      });
+      new_row_node_sensors.append(div2);
+      var div3 = $("<div>", {
+        id: "s_" + sensor3.name,
+        "class": 'col',
+        title: sensor3.name
+      });
+      new_row_node_sensors.append(div3);
+      var div4 = $("<div>", {
+        id: "s_" + sensor4.name,
+        "class": 'col',
+        title: sensor4.name
+      });
+      new_row_node_sensors.append(div4);
+      var div5 = $("<div>", {
+        id: "s_" + sensor5.name,
+        "class": 'col',
+        title: sensor5.name
+      });
+      new_row_node_sensors.append(div5);
+      var div_border = $("<div>", {
+        "class": 'container border',
+      });
+      new_row_node_sensors.append(div_border);
+
+      new_main_node_sensors.append(new_row_node_sensors);
+
+      $("body").html(new_main_node_sensors);
+
+      var new_main_node_filter = $("<div>", { "class": "container" });
+
+
+      var new_row_node_filter = $("<div>", { "class": "row" });
+
+        var div1_filter = $("<div>", {
+        id: "form_select",
+        "class": 'col',
+      });
+
+      var div2_filter = $("<div>", {
+        id: "filterFIR",
+        "class": 'col',
+      });
+
+      var div3_filter = $("<div>", {
+        id: "filterIIR",
+        "class": 'col',
+      });
+      var div_border_filter = $("<div>", {
+        "class": 'container border',
+      });
+
+      new_row_node_filter.append(div1_filter);
+      new_row_node_filter.append(div2_filter);
+      new_row_node_filter.append(div3_filter);
+
+      new_row_node_filter.append(div_border_filter);
+
+      new_main_node_filter.append(new_row_node_filter);
+
+      $("body").append(new_main_node_filter);
+
+
+      $("#s_" + sensor.name).html("Name: " + sensor.name + " | value: " + sensor.v);
+      $("#s_" + sensor1.name).html("Name: " + sensor1.name + " | value: " + sensor1.v);
+      $("#s_" + sensor2.name).html("Name: " + sensor2.name + " | value: " + sensor2.v);
+      $("#s_" + sensor3.name).html("Name: " + sensor3.name + " | value: " + sensor3.v);
+      $("#s_" + sensor4.name).html("Name: " + sensor4.name + " | value: " + sensor4.v);
+      $("#s_" + sensor5.name).html("Name: " + sensor5.name + " | value: " + sensor5.v);
+
+      $("#filterIIR").html('Transmitancja filtru IIR H(z)=<div class="frac"><span>0.5z<sup>-1</sup>+0.1z<sup>-2</sup></span><span class="symbol">/</span><span class="bottom">0.1z<sup>-1</sup>+0.1z<sup>-1</sup></span>');
+      $("#filterFIR").html('Transmitancja filtru FIR H(z)=0.4+0.5z<sup>-1</sup>+0.1z<sup>-2</sup>');
+      $("#form_select").html('<form action="/action_page.php"> <label for="sensors">Choose a sensor:</label> <select name="sensors" id="sensors">   <option value="pressure">pressure</option>  <option value="temperature">temperature</option>  <option value="humidity">humidity</option>   <option value="roll">roll</option> <option value="pitch">pitch</option> <option value="yaw">yaw</option> </select  <br><br> <input type="submit" value="Submit"></form>');
+
+
+      // ^ to trzeba wrzucić do funkcji refresh żeby się aktualizowało 
+
+
+
+      var url_LED_check = 'getpixel.php';
+      //$('body').html('HTTP get request in background url='+url);     
+      // Make HTTP request for IoT device description
+      $.get(url_LED_check, function (data, status) {
+        device_description = JSON.parse(data);
+        new_main_node = $("<div>", { "class": "container" });
+        var new_row_node = null;
+        for (var k = 0; k < 64; k++)
+        // for(var k=0; k<device_description.length; k++)
+        {
+          //Calculate x and y of RGB LED matrix
+          var x = k % 8;
+          var y = Math.floor(k / 8);
+
+          // New row at first element in row
+          if (x == 0)
+            new_row_node = $("<div>", { "class": "row" });
+
+          // New input
+          var new_node = $("<div>", { "class": "col-1" });
+          r = device_description[k][0];
+          g = device_description[k][1];
+          b = device_description[k][2];
+          rgb_hex_color = "#" + (r << 16 | g << 8 | b).toString(16);
+          var new_inputnode = $("<input>", { "id": "LED" + k, "type": "color", "value": rgb_hex_color });
+          new_inputnode.change(function () {
+            var value = $(this).val();
+            var id = $(this).attr('id');
+            id = id.substring(3);
+            var x = id % 8;
+            var y = Math.floor(id / 8);
+            value = parseInt(value.substring(1), 16);
+            r = (value & 0xff0000) >> 16;
+            g = (value & 0x00ff00) >> 8;
+            b = (value & 0x0000ff);
+
+            url_set = "http://172.22.114.218:3210/setpixel.php?x=" + x + "&y=" + y + "&r=" + r + "&g=" + g + "&b=" + b;
+            // $("#feedback").html("User have changed input " + id + " to value equals to " + value + "<br>Request url=" + url);
+            $.get(url_set, function (data, status) {
+              // $("#feedback").append("<br>Server response: "+JSON.stringify(data));
+            });
+          });
+
+          // Add descritpion and input to new node
+          new_node.append('<div>LED ' + k + ' x: ' + x + " y:" + y + '</div>');
+          new_node.append(new_inputnode);
+
+          // Add new node to new row
+          new_row_node.append(new_node);
+
+          // Append new row to main node if it is last in row
+          if (x == 7)
+            new_main_node.append(new_row_node);
+        }
+        // Add DOM to body
+
+        // Add clear button
+        var clear_input = $("<input>", { "id": "clear", "type": "button", "value": "Clear all" });
+        clear_input.click(function () {
+          $("[id^=LED]").val(0); //Nie wiem co to za linijka ona juz byla wczesniej
+          url_clear = "http://172.22.114.218:3210/setpixel.php?C=1";
+          //$("#feedback").html("User have set all inputs to 0.<br>Request url="+url);
+          $.get(url_clear, function (data, status) {
+            //$("#feedback").append("<br>Server response: "+JSON.stringify(data));
+          });
+        });
+        //new_main_node.append('<div class="row"><div id="feedback" class="col-12"></div><div>');
+        new_main_node.append(clear_input);
+        var button = $("<input>", {
+          id: "myFirstButton",
+          type: "button",
+          title: "Sensors update",
+          value: "Sensors update"
+        });
+        // Find element by name body in DOM and add button in it
+        new_main_node.append(button);
+        var url = 'server2.php';
+        function refresh() {
+          $.get(url, function (data, status) {
+            json_text = data;
+             console.log(json_text);
+            sensor = JSON.parse(json_text);
+            console.log(sensor);
+
+            $("#s_" + sensor.zad1.name).html("" + sensor.zad1.name + " | " + sensor.zad1.v.toFixed(2) + "hPa");
+            $("#s_" + sensor.zad2.name).html("" + sensor.zad2.name + " | " + sensor.zad2.v.toFixed(2) + "°C");
+            $("#s_" + sensor.zad3.name).html("" + sensor.zad3.name + " | " + sensor.zad3.v.toFixed(2) + "%");
+            $("#s_" + sensor.zad4.name).html("" + sensor.zad4.name + " roll | " + sensor.zad4.v.toFixed(2) + "°");
+            $("#s_" + sensor.zad5.name).html("" + sensor.zad5.name + " pitch | " + sensor.zad5.v.toFixed(2) + "°");
+            $("#s_" + sensor.zad6.name).html("" + sensor.zad6.name + " yaw | " + sensor.zad6.v.toFixed(2) + "°");
+
+            //console.log(Object.keys(sensor.zad4.v))
+
+
+            // $("#s_"+sensor.id).html(json_text);
+
+          });
+          // click_count++;
+          // $(this).val("Click me again. Counter=" + click_count);
+          // var div = $("<div>", {
+          // 	html: "Next click adds new element to DOM."
+          // });
+          // $("body").append(div);
+        }
+        // var click_count=0;
+        // Assign click handler
+        button.click(refresh);
+        setInterval(refresh,1000);
+        $("body").append(new_main_node);
+
+
+      }); //End of .get
+
+    });
+  </script>
+</head>
+
+<body></body>
+
+</html>

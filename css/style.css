@@ -1,0 +1,9 @@
+#v3{ 
+    color:red;	
+}
+.class_name{ color:green; }
+span.class_name{ color:grey; }
+div > span { color:blue; font-size:10px; }
+[id^=c]{ font-size:25px; }
+.class_name_c1{	color:tomato; }
+*{font-size:30px;}

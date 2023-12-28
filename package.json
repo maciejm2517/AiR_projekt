@@ -1,0 +1,12 @@
+{
+  "name": "aplikacja_podstawowa_maciej_mak_przemyslaw_labun",
+  "version": "1.0.0",
+  "main": "jquery-3.4.1.min.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:dev": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
