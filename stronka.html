@@ -226,44 +226,7 @@
 
       $("#filterIIR").html('Transfer function of IIR H(z)=<div class="frac"><span>0.5z<sup>-1</sup>+0.1z<sup>-2</sup></span><span class="symbol">/</span><span class="bottom">0.1z<sup>-1</sup>+0.1z<sup>-1</sup></span>');
       $("#filterFIR").html('Transfer function of FIR H(z)=0.4+0.5z<sup>-1</sup>+0.1z<sup>-2</sup>');
-      $("#form_select").html('<form id="loginForm"> <label for="sensors">Choose a sensor:</label> <select name="sensors" id="sensors">   <option value="pressure">pressure</option>  <option value="temperature">temperature</option>  <option value="humidity">humidity</option>   <option value="roll">roll</option> <option value="pitch">pitch</option> <option value="yaw">yaw</option> </select  <br><br> <input type="submit" value="Submit"></form>');
-
-      let loginForm = document.getElementById("loginForm");
-      loginForm.addEventListener("submit", (e) => {
-
-        e.preventDefault();
-        let sensor = document.getElementById("sensors");
-        if (sensor.value == "pressure") {
-          $("#filter_val").html('test');
-
-        }
-        if (sensor.value == "temperature") {
-          
-          $("#filter_val").html('test1');
-
-        }
-        if (sensor.value == "humidity") {
-          
-          $("#filter_val").html('test');
-
-        }
-        if (sensor.value == "roll") {
-          
-          $("#filter_val").html('test');
-
-        }
-        if (sensor.value == "pitch") {
-          
-          $("#filter_val").html('test');
-
-        }
-        if (sensor.value == "yaw") {
-          
-          $("#filter_val").html('test');
-
-        }
-
-      });
+      $("#form_select").html('<form id="loginForm"> <label for="sensors">Choose a sensor:</label> <select name="sensors" id="sensors">   <option value="pressure">pressure</option>  <option value="temperature">temperature</option>  <option value="humidity">humidity</option>   <option value="roll">roll</option> <option value="pitch">pitch</option> <option value="yaw">yaw</option> </select  <br></form>');
 
       var new_main_node_slider = $("<div>", { "class": "container" });
       var new_row_node_slider = $("<div>", { "class": "row" });
@@ -295,21 +258,23 @@
       $("#slider_b1").html('b1<div class="slidecontainer"> <input type="range" min="1" max="10" value="5" id="b1_slider_val"></div>');
 
 
-      $('#a0_slider_val').on('input', function () {
+      function tf_function(){
         $("#filterFIR").html('Transfer function of FIR H(z)=' + $("#b0_slider_val").val() / 10 + '+' + $("#b1_slider_val").val() / 10 + 'z<sup>-1</sup>');
-          $("#filterIIR").html('Transfer function of IIR H(z)=<div class="frac"><span>' + $("#b0_slider_val").val() / 10 + '+' + $("#b1_slider_val").val() / 10 + 'z<sup>-1</sup></span><span class="symbol">/</span><span class="bottom">1+' + $("#a0_slider_val").val() / 10 + 'z<sup>-1</sup></span>');
+        $("#filterIIR").html('Transfer function of IIR H(z)=<div class="frac"><span>' + $("#b0_slider_val").val() / 10 + '+' + $("#b1_slider_val").val() / 10 + 'z<sup>-1</sup></span><span class="symbol">/</span><span class="bottom">1+' + $("#a0_slider_val").val() / 10 + 'z<sup>-1</sup></span>');
+      
+      }
 
+      $('#a0_slider_val').on('input', function () {
+        tf_function();
       });
 
       $('#b0_slider_val').on('input', function () {
-        $("#filterFIR").html('Transfer function of FIR H(z)=' + $("#b0_slider_val").val() / 10 + '+' + $("#b1_slider_val").val() / 10 + 'z<sup>-1</sup>');
-          $("#filterIIR").html('Transfer function of IIR H(z)=<div class="frac"><span>' + $("#b0_slider_val").val() / 10 + '+' + $("#b1_slider_val").val() / 10 + 'z<sup>-1</sup></span><span class="symbol">/</span><span class="bottom">1+' + $("#a0_slider_val").val() / 10 + 'z<sup>-1</sup></span>');
+        tf_function();
 
       });
 
       $('#b1_slider_val').on('input', function () {
-        $("#filterFIR").html('Transfer function of FIR H(z)=' + $("#b0_slider_val").val() / 10 + '+' + $("#b1_slider_val").val() / 10 + 'z<sup>-1</sup>');
-          $("#filterIIR").html('Transfer function of IIR H(z)=<div class="frac"><span>' + $("#b0_slider_val").val() / 10 + '+' + $("#b1_slider_val").val() / 10 + 'z<sup>-1</sup></span><span class="symbol">/</span><span class="bottom">1+' + $("#a0_slider_val").val() / 10 + 'z<sup>-1</sup></span>');
+        tf_function();
 
       });
 
