@@ -198,7 +198,11 @@
         "class": 'col',
       });
       var div4_filter = $("<div>", {
-        id: "filter_val",
+        id: "filter_val_FIR",
+        "class": 'col',
+      });
+      var div5_filter = $("<div>", {
+        id: "filter_val_IIR",
         "class": 'col',
       });
       var div_border_filter = $("<div>", {
@@ -209,6 +213,7 @@
       new_row_node_filter.append(div2_filter);
       new_row_node_filter.append(div3_filter);
       new_row_node_filter.append(div4_filter);
+      new_row_node_filter.append(div5_filter);
 
       new_row_node_filter.append(div_border_filter);
 
@@ -224,8 +229,6 @@
       $("#s_" + sensor4.name).html("Name: " + sensor4.name + " | value: " + sensor4.v);
       $("#s_" + sensor5.name).html("Name: " + sensor5.name + " | value: " + sensor5.v);
 
-      $("#filterIIR").html('Transfer function of IIR H(z)=<div class="frac"><span>0.5z<sup>-1</sup>+0.1z<sup>-2</sup></span><span class="symbol">/</span><span class="bottom">0.1z<sup>-1</sup>+0.1z<sup>-1</sup></span>');
-      $("#filterFIR").html('Transfer function of FIR H(z)=0.4+0.5z<sup>-1</sup>+0.1z<sup>-2</sup>');
       $("#form_select").html('<form id="loginForm"> <label for="sensors">Choose a sensor:</label> <select name="sensors" id="sensors">   <option value="pressure">pressure</option>  <option value="temperature">temperature</option>  <option value="humidity">humidity</option>   <option value="roll">roll</option> <option value="pitch">pitch</option> <option value="yaw">yaw</option> </select  <br></form>');
 
       var new_main_node_slider = $("<div>", { "class": "container" });
@@ -258,10 +261,97 @@
       $("#slider_b1").html('b1<div class="slidecontainer"> <input type="range" min="1" max="10" value="5" id="b1_slider_val"></div>');
 
 
-      function tf_function(){
+
+      let sensors_old = {
+        "pressure": 0,
+        "temperature": 0,
+        "humidity": 0,
+        "roll": 0,
+        "pitch": 0,
+        "yaw": 0
+      }
+
+      let sensors = {
+        "zad1": { "name": "pressure", val: 10 },
+        "zad2": { "name": "temperature", val: 10 },
+        "zad3": { "name": "humidity", val: 10 },
+        "zad4": { "name": "roll", val: 10 },
+        "zad5": { "name": "pitch", val: 10 },
+        "zad6": { "name": "yaw", val: 10 }
+      }
+
+      var outputFIR = {
+        "pressure": 0,
+        "temperature": 0,
+        "humidity": 0,
+        "roll": 0,
+        "pitch": 0,
+        "yaw": 0
+      };
+      var outputIIR = {
+        "pressure": 0,
+        "temperature": 0,
+        "humidity": 0,
+        "roll": 0,
+        "pitch": 0,
+        "yaw": 0
+      }
+      var outputIIR_old = {
+        "pressure": 0,
+        "temperature": 0,
+        "humidity": 0,
+        "roll": 0,
+        "pitch": 0,
+        "yaw": 0
+      }
+
+      function tf_function() {
         $("#filterFIR").html('Transfer function of FIR H(z)=' + $("#b0_slider_val").val() / 10 + '+' + $("#b1_slider_val").val() / 10 + 'z<sup>-1</sup>');
         $("#filterIIR").html('Transfer function of IIR H(z)=<div class="frac"><span>' + $("#b0_slider_val").val() / 10 + '+' + $("#b1_slider_val").val() / 10 + 'z<sup>-1</sup></span><span class="symbol">/</span><span class="bottom">1+' + $("#a0_slider_val").val() / 10 + 'z<sup>-1</sup></span>');
-      
+        if ($("#sensors").val() == "pressure") {
+          outputIIR_old.pressure = outputIIR.pressure;
+          outputFIR.pressure = $("#b0_slider_val").val() / 10 * sensors.zad1.val + $("#b1_slider_val").val() / 10 * sensors_old.pressure;
+          outputIIR.pressure = $("#b0_slider_val").val() / 10 * sensors.zad1.val + $("#b1_slider_val").val() / 10 * sensors_old.pressure - $("#a0_slider_val").val() / 10 * outputIIR_old.pressure;
+          $("#filter_val_FIR").html("FIR output " + outputFIR.pressure);
+          $("#filter_val_IIR").html("IIR output " + outputIIR.pressure);
+        }
+        if ($("#sensors").val() == "temperature") {
+          outputIIR_old.temperature = outputIIR.temperature;
+          outputFIR.temperature = $("#b0_slider_val").val() / 10 * sensors.zad2.val + $("#b1_slider_val").val() / 10 * sensors_old.temperature;
+          outputIIR.temperature = $("#b0_slider_val").val() / 10 * sensors.zad2.val + $("#b1_slider_val").val() / 10 * sensors_old.temperature - $("#a0_slider_val").val() / 10 * outputIIR_old.temperature;
+          $("#filter_val_FIR").html("FIR output " + outputFIR.temperature);
+          $("#filter_val_IIR").html("IIR output " + outputIIR.temperature);
+        }
+        if ($("#sensors").val() == "humidity") {
+          outputIIR_old.humidity = outputIIR.humidity;
+          outputFIR.humidity = $("#b0_slider_val").val() / 10 * sensors.zad1.val + $("#b1_slider_val").val() / 10 * sensors_old.humidity;
+          outputIIR.humidity = $("#b0_slider_val").val() / 10 * sensors.zad1.val + $("#b1_slider_val").val() / 10 * sensors_old.humidity - $("#a0_slider_val").val() / 10 * outputIIR_old.humidity;
+          $("#filter_val_FIR").html("FIR output " + outputFIR.humidity);
+          $("#filter_val_IIR").html("IIR output " + outputIIR.humidity);
+        }
+        if ($("#sensors").val() == "roll") {
+          outputIIR_old.roll = outputIIR.roll;
+          outputFIR.roll = $("#b0_slider_val").val() / 10 * sensors.zad3.val + $("#b1_slider_val").val() / 10 * sensors_old.roll;
+          outputIIR.roll = $("#b0_slider_val").val() / 10 * sensors.zad3.val + $("#b1_slider_val").val() / 10 * sensors_old.roll - $("#a0_slider_val").val() / 10 * outputIIR_old.roll;
+          $("#filter_val_FIR").html("FIR output " + outputFIR.roll);
+          $("#filter_val_IIR").html("IIR output " + outputIIR.roll);
+        }
+        if ($("#sensors").val() == "pitch") {
+          outputIIR_old.pitch = outputIIR.pitch;
+          outputFIR.pitch = $("#b0_slider_val").val() / 10 * sensors.zad4.val + $("#b1_slider_val").val() / 10 * sensors_old.pitch;
+          outputIIR.pitch = $("#b0_slider_val").val() / 10 * sensors.zad4.val + $("#b1_slider_val").val() / 10 * sensors_old.pitch - $("#a0_slider_val").val() / 10 * outputIIR_old.pitch;
+          $("#filter_val_FIR").html("FIR output " + outputFIR.pitch);
+          $("#filter_val_IIR").html("IIR output " + outputIIR.pitch);
+        }
+        if ($("#sensors").val() == "yaw") {
+          outputIIR_old.yaw = outputIIR.yaw;
+          outputFIR.yaw = $("#b0_slider_val").val() / 10 * sensors.zad5.val + $("#b1_slider_val").val() / 10 * sensors_old.yaw;
+          outputIIR.yaw = $("#b0_slider_val").val() / 10 * sensors.zad5.val + $("#b1_slider_val").val() / 10 * sensors_old.yaw - $("#a0_slider_val").val() / 10 * outputIIR_old.yaw;
+          $("#filter_val_FIR").html("FIR output " + outputFIR.yaw);
+          $("#filter_val_IIR").html("IIR output " + outputIIR.yaw);
+        }
+
+
       }
 
       $('#a0_slider_val').on('input', function () {
